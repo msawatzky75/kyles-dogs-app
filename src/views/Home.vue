@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ProductSlider from "product-slider.vue";
+import ProductSlider from "../components/product_slider.vue";
 export default {
 	components: {
 		ProductSlider

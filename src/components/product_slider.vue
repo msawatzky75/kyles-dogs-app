@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Product from "product.vue";
+import Product from "./product.vue";
 export default {
 	name: "ProductSlider",
 	components: {
