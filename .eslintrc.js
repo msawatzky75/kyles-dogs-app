@@ -1,14 +1,41 @@
 module.exports = {
-  root: true,
-  env: {
-    node: true
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
   },
-  extends: ["plugin:vue/essential", "@vue/prettier"],
-  rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
-  parserOptions: {
-    parser: "babel-eslint"
+  "rules": {
+    "eol-last": ["error", "always"],
+    "indent": ["error", "tab", { "SwitchCase": 1 }],
+    "keyword-spacing": ["error", { "after": true, "before": true }],
+    "linebreak-style": ["error", "unix"],
+    "no-console": ["error", { "allow": ["log", "warn", "error"] }],
+    "no-trailing-spaces": "error",
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "space-before-blocks": ["error", "always"],
+    "vue/html-closing-bracket-newline": ["warn", {
+      "singleline": "never",
+      "multiline": "never"
+    }],
+    "vue/html-indent": ["error", "tab"],
+    "vue/max-attributes-per-line": ["warn", {
+      "singleline": 6,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
+      }
+    }],
+    "vue/no-use-v-if-with-v-for": ["warn", {
+      "allowUsingIterationVar": true
+    }]
   }
 };
