@@ -21,6 +21,7 @@ export default {
 				{ name: "Categories", to: { name: "categories" } },
 				{ name: "Search", to: { name: "search" } },
 				{ name: "About", to: { name: "about" } },
+				{ name: "Contact", to: { name: "contact" } }
 			]
 		};
 	}
