@@ -5,6 +5,15 @@ import store from "./store";
 
 Vue.config.productionTip = false;
 
+String.prototype.capitalize = function() {
+	let words = this.split(" ");
+	let result = "";
+	for (let key in words) {
+		result += words[key].charAt(0).toUpperCase() + words[key].slice(1) + " ";
+	}
+	return result;
+};
+
 new Vue({
 	router,
 	store,
