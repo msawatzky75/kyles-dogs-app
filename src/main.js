@@ -6,6 +6,10 @@ import store from "./store";
 Vue.config.productionTip = false;
 
 String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+String.prototype.titleize = function() {
 	let words = this.split(" ");
 	let result = "";
 	for (let key in words) {

@@ -3,7 +3,7 @@
 		<div class="columns is-marginless">
 			<div class="column">
 				<p class="title is-1 has-text-centered-touch">
-					Products {{ $route.query.category ? ` of TODO` : '' }}
+					Products
 				</p>
 			</div>
 		</div>
@@ -29,7 +29,7 @@ export default {
 		};
 	},
 	async mounted() {
-		this.products = await (await fetch(`${this.$store.state.api}/products?${encodeURI(this.$router.query)}`)).json();
+		this.products = await this.$store.getters.get_products(this.$router.query);
 	}
 };
 </script>

@@ -18,6 +18,7 @@ export default {
 		return {
 			links: [
 				{ name: "Home", to: { name: "home" } },
+				{ name: "Products", to: { name: "products" } },
 				{ name: "Categories", to: { name: "categories" } },
 				{ name: "Search", to: { name: "search" } },
 				{ name: "About", to: { name: "about" } },
@@ -26,6 +27,7 @@ export default {
 		};
 	},
 	created() {
+		// Set the scss theme.
 		switch (this.$store.state.theme) {
 			case "dark": require("@/assets/dark.scss"); break;
 			default: require("bulma");

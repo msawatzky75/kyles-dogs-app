@@ -20,15 +20,12 @@
 		</div>
 
 		<div class="card-footer">
-			<!-- <div class="card-footer-item">
-				<router-link :to="{ name: 'product', params: { id: product.id } }">
-					View prodcut
-				</router-link>
-			</div> -->
-
-			<div class="card-footer-item">
+			<div class="card-footer-item is-position-relative">
+				<p class="subtitle is-7 is-overlay has-padding-small is-top-left">
+					Category
+				</p>
 				<router-link :to="{ name: 'category', params: { id: product.product_category_id } }">
-					Category: TODO: use store to get category here
+					{{ product.category.name.capitalize() }}
 				</router-link>
 			</div>
 		</div>
@@ -53,5 +50,17 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.is-position-relative {
+	position: relative;
+}
+.has-padding-small {
+	padding: .2em
+}
+.is-top-left {
+	top: 0 !important;
+	left: 0 !important;
+	right: unset !important;
+	bottom: unset !important;
+}
 </style>
