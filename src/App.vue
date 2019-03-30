@@ -24,10 +24,12 @@ export default {
 				{ name: "Contact", to: { name: "contact" } }
 			]
 		};
+	},
+	created() {
+		switch (this.$store.state.theme) {
+			case "dark": require("@/assets/dark.scss"); break;
+			default: require("bulma");
+		}
 	}
 };
 </script>
-
-<style lang="scss">
-@import "@/assets/custom.scss";
-</style>
