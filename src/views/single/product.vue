@@ -1,8 +1,8 @@
 <template lang="html">
-	<div v-if="product" class="columns">
+	<div v-if="product" class="columns is-marginless">
 		<div v-if="product.image.url" class="column is-12-touch">
 			<figure class="image is-4by3">
-				<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Product">
+				<img :src="$store.state.api_domain + product.image.url" alt="Product">
 			</figure>
 		</div>
 
@@ -16,6 +16,7 @@
 			</p>
 		</div>
 	</div>
+
 	<div v-else>
 		<template v-if="loading">
 			<p class="title is-3">
@@ -42,12 +43,12 @@ export default {
 	data() {
 		return {
 			loading: true,
-			product: null
+			product: null,
 		};
 	},
-	async created() {
+	async mounted() {
 		this.loading = true;
-		this.product = await (await fetch(`${this.$store.state.api}/products/${this.id}`)).json();
+		this.product = await this.$store.getters.get_product(this.id);
 		this.loading = false;
 	},
 	methods: {

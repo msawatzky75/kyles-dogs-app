@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		api: "http://localhost:3000/v1",
+		api_domain: "http://localhost:3000",
 		theme: "dark",
 		categories: [],
 		products: [],
