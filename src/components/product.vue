@@ -9,14 +9,14 @@
 			</p>
 		</div>
 
-		<div class="card-content">
-			<p>{{ product.description.capitalize() }}</p>
-		</div>
-
 		<div v-if="product.image.url" class="card-image">
 			<figure class="image">
-				<img :src="product.image.url" :alt="product.name">
+				<img :src="$store.state.api_domain + product.image.url" :alt="product.name">
 			</figure>
+		</div>
+
+		<div class="card-content">
+			<p>{{ product.description.capitalize() }}</p>
 		</div>
 
 		<div class="card-footer">

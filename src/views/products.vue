@@ -29,7 +29,7 @@ export default {
 		};
 	},
 	async mounted() {
-		this.products = await this.$store.getters.get_products(this.$router.query);
+		this.products = await this.$store.getters.get_products(this.$route.query);
 	}
 };
 </script>

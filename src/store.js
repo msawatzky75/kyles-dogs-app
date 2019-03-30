@@ -10,6 +10,8 @@ export default new Vuex.Store({
 		theme: "dark",
 		categories: [],
 		products: [],
+		// Will be used for pagination buttons
+		products_pages: null,
 		user: null
 	},
 	getters: {
@@ -41,22 +43,24 @@ export default new Vuex.Store({
 			return product;
 		},
 		get_products: (state, getters) => async (query) => {
+			const encode_params = p => Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
 			// No guarentee that all of them are in the store, must request.
-			let products = await (await fetch(`${state.api}/products?${encodeURI(query)}`)).json();
+			let products = await (await fetch(`${state.api}/products?${encode_params(query)}`)).json();
+			state.products_pages = products.meta.total_pages;
 
 			// Cache new products (refreshes every session)
-			for (let key in products) {
-				if (!state.products.find(p => p.id == products[key].id)) {
+			for (let key in products.data) {
+				if (!state.products.find(p => p.id == products.data[key].id)) {
 					// Product has not been cached.
-					state.products.push(products[key]);
+					state.products.push(products.data[key]);
 				}
 
 				// To get the category data with the product.
 				// This should not query the api again because we just cached this data.
-				products[key] = await getters.get_product(products[key].id);
+				products.data[key] = await getters.get_product(products.data[key].id);
 			}
 
-			return products;
+			return products.data;
 		}
 	},
 	// Mutations must be synchronous
