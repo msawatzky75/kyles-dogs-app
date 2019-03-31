@@ -20,12 +20,12 @@
 		</div>
 
 		<div class="card-footer">
-			<div class="card-footer-item is-position-relative">
+			<div v-if="category" class="card-footer-item is-position-relative">
 				<p class="subtitle is-7 is-overlay has-padding-small is-top-left">
 					Category
 				</p>
 				<router-link :to="{ name: 'category', params: { id: product.product_category_id } }">
-					{{ product.category.name.capitalize() }}
+					{{ category.name.capitalize() }}
 				</router-link>
 			</div>
 		</div>
@@ -36,16 +36,13 @@
 export default {
 	name: "Product",
 	props: {
-		product: {
-			type: Object,
-			required: true
-		}
+		product: { type: Object, required: true }
+	},
+	computed: {
+		category() { return this.$store.getters.get_category(this.product.product_category_id); }
 	},
 	methods: {
-		getCurreny(num) {
-			let str = num.toString();
-			return `$${str.substring(0, str.length - 2)}.${str.substring(str.length - 2)}`;
-		}
+		getCurreny: n =>`$ ${n.toString().substring(0, n.toString().length - 2)}.${n.toString().substring(n.toString().length - 2)}`
 	}
 };
 </script>

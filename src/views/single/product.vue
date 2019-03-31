@@ -18,16 +18,9 @@
 	</div>
 
 	<div v-else>
-		<template v-if="loading">
-			<p class="title is-3">
-				Loading...
-			</p>
-		</template>
-		<template v-else>
-			<p class="title is-2">
-				Product {{ id }} does not exist
-			</p>
-		</template>
+		<p class="title is-2">
+			Product {{ id }} does not exist
+		</p>
 	</div>
 </template>
 
@@ -40,16 +33,11 @@ export default {
 			required: true
 		}
 	},
-	data() {
-		return {
-			loading: true,
-			product: null,
-		};
+	computed: {
+		product() { return this.$store.getters.get_product(this.$route.params.id); }
 	},
-	async mounted() {
-		this.loading = true;
-		this.product = await this.$store.getters.get_product(this.id);
-		this.loading = false;
+	mounted() {
+		this.$store.dispatch("fetch_product", this.$route.params.id);
 	},
 	methods: {
 		getCurreny(num) {

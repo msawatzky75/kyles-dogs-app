@@ -1,3 +1,4 @@
+const encode_params = p => Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
 import Vue from "vue";
 import Vuex from "vuex";
 
@@ -11,59 +12,54 @@ export default new Vuex.Store({
 		categories: [],
 		products: [],
 		// Will be used for pagination buttons
-		products_pages: null,
+		query_meta: null,
+		// Array of product ids, returned from a search.
+		search: [],
 		user: null
 	},
 	getters: {
-		get_category: state => async (id) => {
-			let category = state.categories.find(c => c.id == id);
-
-			if (!category) {
-				// Product has not been cached.
-				category = await (await fetch(`${state.api}/product_categories/${id}`)).json();
-				state.categories.push(category);
-			}
-
-			return category;
-		},
-		get_product: (state, getters) => async (id) => {
-			// Try to find it in the store
-			let product = state.products.find(p => p.id == id);
-
-			// If its not there, request it.
-			if (!product) {
-				product = await (await fetch(`${state.api}/products/${id}`)).json();
-				// Product has not been cached.
-				state.products.push(product);
-			}
-
-			// Add the category for covenience.
-			product.category = await getters.get_category(product.product_category_id);
-
-			return product;
-		},
-		get_products: (state, getters) => async (query) => {
-			const encode_params = p => Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
-			// No guarentee that all of them are in the store, must request.
-			let products = await (await fetch(`${state.api}/products?${encode_params(query)}`)).json();
-			state.products_pages = products.meta.total_pages;
-
-			// Cache new products (refreshes every session)
-			for (let key in products.data) {
-				if (!state.products.find(p => p.id == products.data[key].id)) {
-					// Product has not been cached.
-					state.products.push(products.data[key]);
-				}
-
-				// To get the category data with the product.
-				// This should not query the api again because we just cached this data.
-				products.data[key] = await getters.get_product(products.data[key].id);
-			}
-
-			return products.data;
-		}
+		get_category: state => id => state.categories.find(c => c.id == id),
+		get_product: state => id => state.products.find(p => p.id == id),
+		get_search: (state, getters) => state.search.map(id => getters.get_product(id))
 	},
 	// Mutations must be synchronous
-	mutations: {},
-	actions: {}
+	mutations: {
+		add_category: (state, category) => state.categories.push(category),
+		add_product: (state, product) => state.products.push(product),
+		set_query_meta: (state, meta) => state.meta = meta,
+		reset_search: state => state.search = [],
+		add_to_search: (state, id) => state.search.push(id)
+	},
+	actions: {
+		async fetch_category({ commit, getters, state }, id) {
+			// If its not already in the store
+			if (!getters.get_category(id)) {
+				let category = await (await fetch(`${state.api}/product_categories/${id}`)).json();
+				commit("add_category", category);
+			}
+		},
+		async fetch_product({ commit, dispatch, getters, state }, id) {
+			if (!getters.get_product(id)) {
+				let product = await (await fetch(`${state.api}/products/${id}`)).json();
+				dispatch("fetch_category", product.product_category_id);
+				commit("add_product", product);
+			}
+		},
+		async search({ commit, dispatch, getters, state }, query) {
+			let data = await (await fetch(`${state.api}/products?${encode_params(query)}`)).json();
+			commit("set_query_meta", data.meta);
+			commit("reset_search");
+
+			for (let key in data.data) {
+				// record the product id in the most recent search
+				commit("add_to_search", data.data[key].id);
+				if (!getters.get_product(data.data[key].id)) {
+					// cache the category
+					dispatch("fetch_category", data.data[key].product_category_id);
+					// cache the product
+					commit("add_product", data.data[key]);
+				}
+			}
+		}
+	}
 });

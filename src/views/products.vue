@@ -23,13 +23,16 @@ export default {
 	components: {
 		Product
 	},
-	data() {
-		return {
-			products: null
-		};
+	computed: {
+		products() { return this.$store.getters.get_search; }
 	},
-	async mounted() {
-		this.products = await this.$store.getters.get_products(this.$route.query);
+	watch: {
+		$route() {
+			this.$store.dispatch("search", this.$route.query);
+		}
+	},
+	mounted() {
+		this.$store.dispatch("search", this.$route.query);
 	}
 };
 </script>

@@ -19,10 +19,10 @@ const router = new Router({
 		{ path: "/home", redirect: "/" },
 		{ path: "/about", name: "about", component: Page, meta: { title: "About" } },
 		{ path: "/contact", name: "contact", component: Page, meta: { title: "Contact" } },
-		{ path: "/category/:id", name: "category", props: true, component: Category, meta: { title: "Category" } },
 		{ path: "/categories", name: "categories", component: Categories, meta: { title: "Categories" } },
-		{ path: "/product/:id", name: "product", props: true, component: Product, meta: { title: "Product" } },
+		{ path: "/categories/:id", name: "category", props: true, component: Category, meta: { title: "Category" } },
 		{ path: "/products", name: "products", component: Products, query: { page: 1 }, meta: { title: "Products" } },
+		{ path: "/products/:id", name: "product", props: true, component: Product, meta: { title: "Product" } },
 		{ path: "/search", name: "search", component: Search, meta: { title: "Search" } },
 	]
 });
