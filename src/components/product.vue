@@ -9,10 +9,12 @@
 			</p>
 		</div>
 
-		<div v-if="product.image.url" class="card-image">
-			<figure class="image">
-				<img :src="$store.state.api_domain + product.image.url" :alt="product.name">
-			</figure>
+		<div class="card-image">
+			<router-link :to="{ name: 'product', params: { id: product.id } }">
+				<figure class="image is-3by2">
+					<img :src="image" :alt="product.name" class="is-radiusless">
+				</figure>
+			</router-link>
 		</div>
 
 		<div class="card-content">
@@ -36,10 +38,12 @@
 export default {
 	name: "Product",
 	props: {
-		product: { type: Object, required: true }
+		id: { type: Number, required: true }
 	},
 	computed: {
-		category() { return this.$store.getters.get_category(this.product.product_category_id); }
+		product() { return this.$store.getters.get_product(this.id); },
+		category() { return this.$store.getters.get_category(this.product.product_category_id); },
+		image() { return this.product.image.card.url ? this.$store.state.api_domain + this.product.image.card.url : require("@/assets/default.png"); }
 	},
 	methods: {
 		getCurreny: n =>`$ ${n.toString().substring(0, n.toString().length - 2)}.${n.toString().substring(n.toString().length - 2)}`

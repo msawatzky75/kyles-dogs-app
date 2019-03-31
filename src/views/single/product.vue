@@ -7,13 +7,11 @@
 		</div>
 
 		<div class="column is-12-touch">
-			<p class="title is-3 has-text-centered-touch">
-				{{ product.name }}
-				<small>({{ getCurreny(product.price) }})</small>
-			</p>
-			<p class="has-text-centered-touch">
-				{{ product.description }}
-			</p>
+			<p class="title is-3 has-text-centered-touch">{{ product.name }} <small>({{ getCurreny(product.price) }})</small></p>
+			<p class="has-text-centered-touch">{{ product.description }}</p>
+			<hr>
+			<p class="title is-5">{{ category.name.capitalize() }} - <small>{{ category.description }}</small> </p>
+			<p class="has-text-centered-touch" />
 		</div>
 	</div>
 
@@ -34,7 +32,8 @@ export default {
 		}
 	},
 	computed: {
-		product() { return this.$store.getters.get_product(this.$route.params.id); }
+		product() { return this.$store.getters.get_product(this.$route.params.id); },
+		category() { return this.$store.getters.get_category(this.product.product_category_id); }
 	},
 	mounted() {
 		this.$store.dispatch("fetch_product", this.$route.params.id);
@@ -47,6 +46,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

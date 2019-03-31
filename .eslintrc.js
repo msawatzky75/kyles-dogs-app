@@ -36,6 +36,11 @@ module.exports = {
     }],
     "vue/no-use-v-if-with-v-for": ["warn", {
       "allowUsingIterationVar": true
+    }],
+    "vue/singleline-html-element-content-newline": ["warn", {
+      "ignoreWhenNoAttributes": true,
+      "ignoreWhenEmpty": true,
+      "ignores": ["p", "div"]
     }]
   }
 };
