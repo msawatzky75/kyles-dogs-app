@@ -10,7 +10,7 @@
 
 		<div class="columns is-multiline is-marginless">
 			<div v-for="(product, key) in products" :key="key" class="column is-4-desktop is-6-tablet">
-				<product :product="product" />
+				<product :id="product" />
 			</div>
 		</div>
 	</div>
@@ -24,15 +24,11 @@ export default {
 		Product
 	},
 	computed: {
-		products() { return this.$store.getters.get_search; }
+		products() { return (this.$store.getters.get_search_by_query(this.$route.query) || { products: [] }).products; }
 	},
 	watch: {
-		$route() {
-			this.$store.dispatch("search", this.$route.query);
-		}
+		$route() { this.$store.dispatch("search", this.$route.query); }
 	},
-	mounted() {
-		this.$store.dispatch("search", this.$route.query);
-	}
+	mounted() { this.$store.dispatch("search", this.$route.query); }
 };
 </script>

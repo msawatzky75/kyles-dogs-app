@@ -11,31 +11,44 @@ export default new Vuex.Store({
 		theme: "dark",
 		categories: [],
 		products: [],
-		// Will be used for pagination buttons
-		query_meta: null,
-		// Array of product ids, returned from a search.
-		search: [],
+		product_status_codes: [],
+		// { query: {}, meta: {}, products: [] }
+		searches: [],
 		user: null
 	},
 	getters: {
 		get_category: state => id => state.categories.find(c => c.id == id),
 		get_product: state => id => state.products.find(p => p.id == id),
-		get_search: (state, getters) => state.search.map(id => getters.get_product(id))
+		get_product_status_code: state => id => state.product_status_codes.find(s => s.id == id),
+		get_search_by_query: state => query => state.searches.find(s => JSON.stringify(s.query) == JSON.stringify(query))
 	},
 	// Mutations must be synchronous
 	mutations: {
 		add_category: (state, category) => state.categories.push(category),
 		add_product: (state, product) => state.products.push(product),
-		set_query_meta: (state, meta) => state.meta = meta,
-		reset_search: state => state.search = [],
-		add_to_search: (state, id) => state.search.push(id)
+		add_product_status_code: (state, status) => state.product_status_codes.push(status),
+		add_search: (state, { query, meta, products }) => state.searches.push({ query, meta, products })
 	},
 	actions: {
 		async fetch_category({ commit, getters, state }, id) {
 			// If its not already in the store
 			if (!getters.get_category(id)) {
-				let category = await (await fetch(`${state.api}/product_categories/${id}`)).json();
-				commit("add_category", category);
+				commit("add_category", await (await fetch(`${state.api}/product_categories/${id}`)).json());
+			}
+		},
+		async fetch_product_status({ commit, getters, state }, id) {
+			// If its not already in the store
+			if (!getters.get_product_status_code(id)) {
+				commit("add_product_status_code", await (await fetch(`${state.api}/product_status_codes/${id}`)).json());
+			}
+		},
+		async fetch_product_status_codes({ commit, getters, state}) {
+			let codes = await (await fetch(`${state.api}/product_status_codes`)).json();
+			for (let key in codes) {
+				// If its not already in the store
+				if (!getters.get_product_status_code(codes[key].id)) {
+					commit("add_product_status_code", codes[key]);
+				}
 			}
 		},
 		async fetch_product({ commit, dispatch, getters, state }, id) {
@@ -46,19 +59,24 @@ export default new Vuex.Store({
 			}
 		},
 		async search({ commit, dispatch, getters, state }, query) {
-			let data = await (await fetch(`${state.api}/products?${encode_params(query)}`)).json();
-			commit("set_query_meta", data.meta);
-			commit("reset_search");
+			if (!getters.get_search_by_query(query)) {
+				let products = [];
+				let data = await (await fetch(`${state.api}/products?${encode_params(query)}`)).json();
+				// Add the products after the api call.
 
-			for (let key in data.data) {
-				// record the product id in the most recent search
-				commit("add_to_search", data.data[key].id);
-				if (!getters.get_product(data.data[key].id)) {
-					// cache the category
-					dispatch("fetch_category", data.data[key].product_category_id);
-					// cache the product
-					commit("add_product", data.data[key]);
+				for (let key in data.data) {
+					products.push(data.data[key].id);
+					if (!getters.get_product(data.data[key].id)) {
+						// request to cache the category and status
+						// gotta be careful to not send too many at once, could cause duplicates in the store.
+						await dispatch("fetch_category", data.data[key].product_category_id);
+						await dispatch("fetch_product_status", data.data[key].product_status_code_id);
+						// cache the product
+						commit("add_product", data.data[key]);
+					}
 				}
+
+				commit("add_search", { query, meta: data.meta, products });
 			}
 		}
 	}

@@ -14,18 +14,13 @@
 
 		<div class="columns is-multiline is-marginless">
 			<div v-for="(product, key) in products" :key="key" class="column is-4-desktop is-6-tablet">
-				<product :product="product" />
+				<product :id="product" />
 			</div>
 		</div>
 	</div>
 
 	<div v-else class="columns is-marginless">
-		<div v-if="loading" class="column">
-			<p class="title is-3">
-				Loading...
-			</p>
-		</div>
-		<div v-else class="column">
+		<div class="column">
 			<p class="title is-2">
 				Category {{ id }} does not exist
 			</p>
@@ -46,18 +41,12 @@ export default {
 			required: true
 		}
 	},
-	data() {
-		return {
-			loading: true,
-			category: null,
-			products: []
-		};
+	computed: {
+		products() { return (this.$store.getters.get_search_by_query({ product_category: Number(this.id) }) || { products: [] }).products; },
+		category() { return this.$store.getters.get_category(this.id); }
 	},
 	async mounted() {
-		this.loading = true;
-		this.category = await this.$store.getters.get_category(this.id);
-		this.products = await this.$store.getters.get_products({ product_category: this.id });
-		this.loading = false;
+		this.$store.dispatch("search", { product_category: Number(this.id) });
 	},
 	methods: {
 		getCurreny(num) {
