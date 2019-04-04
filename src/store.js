@@ -12,7 +12,6 @@ export default new Vuex.Store({
 		categories: [],
 		products: [],
 		product_status_codes: [],
-		// { query: {}, meta: {}, products: [] }
 		searches: [],
 		user: null
 	},
