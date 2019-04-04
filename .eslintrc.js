@@ -40,7 +40,7 @@ module.exports = {
     "vue/singleline-html-element-content-newline": ["warn", {
       "ignoreWhenNoAttributes": true,
       "ignoreWhenEmpty": true,
-      "ignores": ["p", "div"]
+      "ignores": ["p", "div", "a", "span"]
     }]
   }
 };
