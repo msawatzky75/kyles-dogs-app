@@ -1,9 +1,9 @@
 <template>
 	<nav v-if="range" class="pagination is-centered" role="navigation" aria-label="pagination">
-		<router-link v-if="currentPage - 1 > 0" :to="{ name: $route.name, query: { ...$route.query, page: currentPage - 1 } }" class="pagination-previous" @click="$emit('changedPage', currentPage - 1)">
+		<router-link v-if="currentPage != 1" :to="{ name: $route.name, query: { ...$route.query, page: currentPage - 1 } }" class="pagination-previous" @click="$emit('changedPage', currentPage - 1)">
 			Previous
 		</router-link>
-		<router-link v-if="(currentPage - -1) < totalPages" :to="{ name: $route.name, query: {...$route.query, page: currentPage - -1 } }" class="pagination-next" @click="$emit('changedPage', currentPage - -1)">
+		<router-link v-if="currentPage != totalPages" :to="{ name: $route.name, query: {...$route.query, page: currentPage - -1 } }" class="pagination-next" @click="$emit('changedPage', currentPage - -1)">
 			Next
 		</router-link>
 

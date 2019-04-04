@@ -41,12 +41,21 @@ export default new Vuex.Store({
 				commit("add_product_status_code", await (await fetch(`${state.api}/product_status_codes/${id}`)).json());
 			}
 		},
-		async fetch_product_status_codes({ commit, getters, state}) {
+		async fetch_product_status_codes({ commit, getters, state }) {
 			let codes = await (await fetch(`${state.api}/product_status_codes`)).json();
 			for (let key in codes) {
 				// If its not already in the store
 				if (!getters.get_product_status_code(codes[key].id)) {
 					commit("add_product_status_code", codes[key]);
+				}
+			}
+		},
+		async fetch_product_categories({ commit, getters, state }) {
+			let codes = await (await fetch(`${state.api}/product_categories`)).json();
+			for (let key in codes) {
+				// If its not already in the store
+				if (!getters.get_category(codes[key].id)) {
+					commit("add_category", codes[key]);
 				}
 			}
 		},

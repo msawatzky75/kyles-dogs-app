@@ -32,6 +32,8 @@ export default {
 			case "dark": require("@/assets/dark.scss"); break;
 			default: require("bulma");
 		}
+		this.$store.dispatch("fetch_product_status_codes");
+		this.$store.dispatch("fetch_product_categories");
 	}
 };
 </script>

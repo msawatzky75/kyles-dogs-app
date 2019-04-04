@@ -21,6 +21,7 @@ const router = new Router({
 		{ path: "/contact", name: "contact", component: Page, meta: { title: "Contact" } },
 		{ path: "/categories", name: "categories", component: Categories, meta: { title: "Categories" } },
 		{ path: "/categories/:id", name: "category", props: true, component: Category, meta: { title: "Category" } },
+		{ path: "/products", redirect: "/products/all" },
 		{ path: "/products/:status_code_name", name: "products", component: Products, meta: { title: "Products" } },
 		{ path: "/products/:id", name: "product", props: true, component: Product, meta: { title: "Product" } },
 		{ path: "/search", name: "search", component: Search, meta: { title: "Search" } },
