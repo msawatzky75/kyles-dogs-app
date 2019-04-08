@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "docker build -t msawatzky75/kyles-dogs-app . && docker login && docker push msawatzky75/kyles-dogs-app"
   },
   "dependencies": {
     "@vue/cli": "^3.5.3",
