@@ -6,8 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		api: "http://localhost:3000/v1",
-		api_domain: "http://localhost:3000",
+		api: `${process.env.VUE_APP_API_ROOT}/v1`,
+		api_domain: process.env.VUE_APP_API_ROOT,
 		theme: "dark",
 		categories: [],
 		products: [],

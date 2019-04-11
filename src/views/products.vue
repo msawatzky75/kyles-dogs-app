@@ -2,7 +2,7 @@
 	<div>
 		<div class="tabs">
 			<ul>
-				<router-link v-for="(status_code, index) in product_status_codes" :key="index" tag="li" :to="{ name: 'products', params: { status_code_name: status_code.name.toLowerCase() } }" active-class="is-active" exact>
+				<router-link v-for="(status_code, index) in product_status_codes" :key="index" tag="li" :to="{ name: 'status_code', params: { status_code_name: status_code.name.toLowerCase() } }" active-class="is-active" exact>
 					<a>{{ status_code.name }}</a>
 				</router-link>
 			</ul>

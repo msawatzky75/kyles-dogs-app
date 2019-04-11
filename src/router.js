@@ -10,7 +10,6 @@ import Products from "./views/products.vue";
 import Search from "./views/search.vue";
 
 Vue.use(Router);
-
 const router = new Router({
 	mode: "history",
 	base: process.env.BASE_URL,
@@ -22,8 +21,9 @@ const router = new Router({
 		{ path: "/categories", name: "categories", component: Categories, meta: { title: "Categories" } },
 		{ path: "/categories/:id", name: "category", props: true, component: Category, meta: { title: "Category" } },
 		{ path: "/products", redirect: "/products/all" },
-		{ path: "/products/:status_code_name", name: "products", component: Products, meta: { title: "Products" } },
+		{ path: "/products/", name: "products", component: Products, meta: { title: "Products" } },
 		{ path: "/products/:id", name: "product", props: true, component: Product, meta: { title: "Product" } },
+		{ path: "/status_code/:status_code_name", name: "status_code", component: Products, meta: { title: "Products" } },
 		{ path: "/search", name: "search", component: Search, meta: { title: "Search" } },
 	]
 });
